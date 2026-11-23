@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Evaluation Metrics — Face Recognition System</title>
+  <meta name="description" content="Face recognition model evaluation metrics: accuracy, F1-score, confusion matrix, and per-class performance."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/static/css/style.css"/>
+</head>
+<body>
+<header class="header">
+  <div class="header-inner">
+    <div class="logo">
+      <span class="logo-icon">👁</span>
+      <span class="logo-text">FaceID <span class="logo-tag">AI</span></span>
+    </div>
+    <nav>
+      <a href="/" class="nav-link">Recognize</a>
+      <a href="/evaluate" class="nav-link active">Metrics</a>
+    </nav>
+  </div>
+</header>
+
+<main class="main">
+  <section class="hero">
+    <h1 class="hero-title">Evaluation <span class="gradient-text">Metrics</span></h1>
+    <p class="hero-sub">Measured on held-out test split — no test data used during training</p>
+  </section>
+
+  {% if error %}
+  <div class="card" style="border-left: 4px solid #e74c3c; padding:2rem;">
+    <p style="color:#e74c3c;">{{ error }}</p>
+    <a href="/" class="btn btn-primary mt-4" style="display:inline-block">← Back to Demo</a>
+  </div>
+  {% else %}
+
+  <!-- KPI grid -->
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <span class="kpi-label">Accuracy</span>
+      <span class="kpi-value">{{ "%.1f"|format((report.accuracy if report.accuracy is defined and report.accuracy is not none else 0.0) * 100) }}%</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-label">Macro F1</span>
+      <span class="kpi-value">{{ "%.3f"|format(report.f1_macro if report.f1_macro is defined and report.f1_macro is not none else 0.0) }}</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-label">Weighted F1</span>
+      <span class="kpi-value">{{ "%.3f"|format(report.f1_weighted if report.f1_weighted is defined and report.f1_weighted is not none else 0.0) }}</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-label">Identities</span>
+      <span class="kpi-value">{{ report.n_classes if report.n_classes is defined and report.n_classes is not none else (report.class_names|length if report.class_names is defined and report.class_names is not none else 0) }}</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-label">False Accept (FAR)</span>
+      <span class="kpi-value" style="color:#2ecc71;">{{ "%.1f"|format((report.false_acceptance_rate if report.false_acceptance_rate is defined and report.false_acceptance_rate is not none else 0.0) * 100) }}%</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-label">False Reject (FRR)</span>
+      <span class="kpi-value" style="color:#f39c12;">{{ "%.1f"|format((report.false_rejection_rate if report.false_rejection_rate is defined and report.false_rejection_rate is not none else 0.0) * 100) }}%</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-label">Test Samples</span>
+      <span class="kpi-value">{{ report.n_evaluated if report.n_evaluated is defined and report.n_evaluated is not none else (report.n_total if report.n_total is defined and report.n_total is not none else 0) }}</span>
+    </div>
+    <div class="kpi-card">
+      <span class="kpi-label">Avg Latency</span>
+      <span class="kpi-value">{{ report.avg_latency_ms if report.avg_latency_ms is defined and report.avg_latency_ms is not none else 0.0 }} ms</span>
+    </div>
+  </div>
+
+  <!-- Detailed breakdown -->
+  <div class="card" style="margin-top:2rem;">
+    <h2 style="font-size:1.1rem;font-weight:600;margin-bottom:1rem;">Classification Report</h2>
+    <pre class="code-block">{{ report.classification_report_text }}</pre>
+  </div>
+
+  <!-- Generated visual artifacts -->
+  <div class="card" style="margin-top:2rem;">
+    <h2 style="font-size:1.1rem;font-weight:600;margin-bottom:1rem;">Evaluation Visualizations</h2>
+    <div style="display:grid;grid-template-columns:1fr;gap:2rem;">
+      <div>
+        <h3 style="font-size:0.95rem;font-weight:600;color:var(--text-muted);margin-bottom:0.75rem;">Confusion Matrix (Normalized)</h3>
+        <img src="/artifacts/confusion_matrix.png" alt="Confusion Matrix" style="width:100%;border-radius:8px;border:1px solid var(--border);" onerror="this.style.display='none'"/>
+      </div>
+      <div>
+        <h3 style="font-size:0.95rem;font-weight:600;color:var(--text-muted);margin-bottom:0.75rem;">Per-Class F1 Score Breakdown</h3>
+        <img src="/artifacts/per_class_metrics.png" alt="Per-Class F1" style="width:100%;border-radius:8px;border:1px solid var(--border);" onerror="this.style.display='none'"/>
+      </div>
+      <div>
+        <h3 style="font-size:0.95rem;font-weight:600;color:var(--text-muted);margin-bottom:0.75rem;">Sample Predictions Panel</h3>
+        <img src="/artifacts/prediction_panel.png" alt="Prediction Panel" style="width:100%;border-radius:8px;border:1px solid var(--border);" onerror="this.style.display='none'"/>
+      </div>
+    </div>
+  </div>
+
+  {% endif %}
+</main>
+
+<footer class="footer">
+  <p>Face Recognition System &nbsp;|&nbsp;
+     <a href="/" class="footer-link">← Back to Demo</a>
+  </p>
+</footer>
+</body>
+</html>

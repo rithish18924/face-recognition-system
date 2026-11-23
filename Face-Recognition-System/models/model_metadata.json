@@ -1,0 +1,12 @@
+{
+  "classifier_name": "LogisticRegression",
+  "val_accuracy": 0.745875,
+  "train_accuracy": 1.0,
+  "train_time_seconds": 2.33,
+  "n_classes": 62,
+  "embedding_dim": 1280,
+  "extractor_strategy": "mobilenetv2",
+  "model_path": "C:\\Users\\sures\\Downloads\\Face Recognition\\models\\face_recognition_model.pkl",
+  "encoder_path": "C:\\Users\\sures\\Downloads\\Face Recognition\\models\\label_encoder.pkl",
+  "centroids_path": "C:\\Users\\sures\\Downloads\\Face Recognition\\models\\centroids.npy"
+}
